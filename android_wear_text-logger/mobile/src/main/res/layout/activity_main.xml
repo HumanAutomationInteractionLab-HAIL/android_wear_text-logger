@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.krzysztofwitczak.androwearapp.activities.MainActivity">
+    tools:context="com.krzysztofwitczak.textlogger.activities.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -19,94 +19,114 @@
 
     <ImageView
         android:id="@+id/circle"
-        android:src="@drawable/circle"
         android:layout_width="260dp"
         android:layout_height="260dp"
-        tools:layout_editor_absoluteX="0dp"
-        android:layout_marginTop="42dp"
         android:layout_below="@+id/my_toolbar"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:src="@drawable/circle"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/emotionType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Analyzing..."
+        android:layout_above="@+id/heart_rate_mobile"
+        android:layout_centerHorizontal="true"
+        android:text="Received Message"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_above="@+id/heart_rate_mobile"
-        android:layout_centerHorizontal="true" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/heart_rate_mobile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unknown Bpm"
+        android:layout_alignBottom="@+id/circle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="84dp"
+        android:text="Unknown "
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="84dp"
-        android:layout_alignBottom="@+id/circle"
-        android:layout_centerHorizontal="true" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/thresholds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/radio_buttons_explanation"
+        android:layout_below="@+id/circle"
+        android:layout_marginTop="19dp"
         android:text="Focus: Unknown"
         android:textSize="16sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="19dp"
-        android:layout_below="@+id/circle"
-        android:layout_alignStart="@+id/radio_buttons_explanation" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/radio_buttons_explanation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/radioGroup"
+        android:layout_below="@+id/circle"
+        android:layout_marginTop="49dp"
         android:text="Way of detecting emotions:"
-        android:textSize="20sp"
         android:textColor="#000000"
+        android:textSize="20sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="49dp"
-        android:layout_below="@+id/circle"
-        android:layout_alignStart="@+id/radioGroup" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/radioGroup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="17dp"
-        android:id="@+id/radioGroup"
+        android:layout_alignStart="@+id/circle"
         android:layout_below="@+id/radio_buttons_explanation"
-        android:layout_alignStart="@+id/circle">
-        <RadioButton android:id="@+id/radio_default"
+        android:layout_marginTop="17dp"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <RadioButton
+            android:id="@+id/radio_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Default"
             android:checked="true"
-            android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/radio_sensaura"
+            android:onClick="onRadioButtonClicked"
+            android:text="Default" />
+
+        <RadioButton
+            android:id="@+id/radio_sensaura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sensaura"
-            android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/radio_emulate"
+            android:onClick="onRadioButtonClicked"
+            android:text="Sensaura" />
+
+        <RadioButton
+            android:id="@+id/radio_emulate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Emulate"
-            android:onClick="showEmulateModal"/>
+            android:onClick="showEmulateModal"
+            android:text="Emulate" />
+
+
     </RadioGroup>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:text="Submit" />
 
 </RelativeLayout>

@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.krzysztofwitczak.androwearapp.activities.SettingsActivity">
+    tools:context="com.krzysztofwitczak.textlogger.activities.SettingsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

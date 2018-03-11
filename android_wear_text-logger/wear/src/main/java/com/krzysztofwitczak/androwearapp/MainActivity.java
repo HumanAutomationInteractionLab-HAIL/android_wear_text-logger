@@ -15,10 +15,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.BoxInsetLayout;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,6 +58,10 @@ public class MainActivity extends WearableActivity implements
     private String lastRateValue;
     private boolean isConnected = false;
 
+    Button clickButton ;
+
+    EditText mEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +70,28 @@ public class MainActivity extends WearableActivity implements
 
         ImageView imageView = (ImageView) findViewById(R.id.heart);
         Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
-        imageView.startAnimation(pulse);
+        //disable image heart animation - by HJB
+        //imageView.startAnimation(pulse);
 
         mContainerView = (BoxInsetLayout) findViewById(R.id.container);
         mTextView = (TextView) findViewById(R.id.text);
+        clickButton = (Button) findViewById(R.id.submit);
+        mEdit = (EditText) findViewById(R.id.editText);
+
+        clickButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //mRateValue ="666";
+
+                mRateValue =   mEdit.getText().toString();
+
+                updateDisplay();
+                lastRateValue = mRateValue;
+
+
+            }
+        });
 
         mGoogleApiClient = new GoogleApiClient.Builder(MainActivity.this)
                                              .addApi(Wearable.API)
@@ -87,9 +113,15 @@ public class MainActivity extends WearableActivity implements
                 if (!isConnected || lastRateValue == null) {
                     return;
                 }
+               // new SendToDataLayerThread(lastRateValue, lastRateValue).start();
+
                 new SendToDataLayerThread(lastRateValue, lastRateValue).start();
+
+
             }
         }, 0, 1000);
+
+
     }
 
     @Override
@@ -127,8 +159,14 @@ public class MainActivity extends WearableActivity implements
     @Override
     public void onSensorChanged(SensorEvent event) {
         mRateValue = Integer.toString(Math.round(event.values[0]));
+        mRateValue ="999";
         updateDisplay();
-        lastRateValue = mRateValue;
+
+        //when we disable this, the sensor value change will not be sent to the pad/phone
+        //lastRateValue = mRateValue;
+
+       // lastRateValue = "99999";
+
     }
 
     @Override
@@ -209,6 +247,6 @@ public class MainActivity extends WearableActivity implements
             mContainerView.setBackground(null);
         }
 
-        mTextView.setText(String.format("%s Bpm", mRateValue));
+        mTextView.setText(String.format("%s bmp", mRateValue));
     }
 }
