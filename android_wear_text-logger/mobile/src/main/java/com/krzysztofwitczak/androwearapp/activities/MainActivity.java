@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mThresholdView;
 
     Button clickButton;
+    String EntryContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,14 +138,14 @@ public class MainActivity extends AppCompatActivity {
                 writer = new CSVWriter(new FileWriter(fileFullPath, true));
             } else {    // File not exist
                 writer = new CSVWriter(new FileWriter(fileFullPath));
-                contents = new String[]{"acc_x", "acc_y", "acc_z"};
+                contents = new String[]{"startTime", "startTimeHuman", "EndTime","EndTimeHuman",  "EntryContent"};
                 writer.writeNext(contents);
             }
 
             // final byte[] data = "Hahahahah,babba,dadas";
             //contents = new String(data).split(",");
-
-            contents = new String[]{"1", "2", "3"};
+            EntryContent = mHeartRateView.getText().toString();
+            contents = new String[]{ EntryContent};
             writer.writeNext(contents);
             writer.close();
 

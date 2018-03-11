@@ -5,9 +5,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
-import com.krzysztofwitczak.androwearapp.emotions.Emotion;
 import com.krzysztofwitczak.androwearapp.emotions.EmotionClassifier;
-import com.krzysztofwitczak.androwearapp.game_server_connection.GameConnectionHelper;
 
 public class WearListCallListenerService extends WearableListenerService {
     public static final String LOG_KEY = "WEAR_SERVICE";
@@ -19,6 +17,7 @@ public class WearListCallListenerService extends WearableListenerService {
 
     private EmotionClassifier emotionClassifier;
 
+    String heartRate;
 
     @Override
     public void onCreate() {
@@ -31,10 +30,14 @@ public class WearListCallListenerService extends WearableListenerService {
     public void onMessageReceived(MessageEvent messageEvent) {
         super.onMessageReceived(messageEvent);
 
-        int heartRate = Integer.parseInt(messageEvent.getPath());
+        //int heartRate = Integer.parseInt(messageEvent.getPath());
+
+         heartRate = messageEvent.getPath();
         Log.i(LOG_KEY, "Heart rate gathered from the watch!: " + heartRate);
 
-        // TODO: Calculate EmotionType here, send it to UI + HeartRate
+        sendBroadcastMessage(heartRate);
+
+  /*      // TODO: Calculate EmotionType here, send it to UI + HeartRate
         emotionClassifier.getHeartData().add(heartRate);
         Emotion emotion = emotionClassifier.getEmotion();
 
@@ -50,15 +53,25 @@ public class WearListCallListenerService extends WearableListenerService {
                 Integer.toString(Math.round(emotion.getCertainty())),
                 String.format("%d - %d Bpm",
                         emotionClassifier.boredThreshold,
-                        emotionClassifier.stressedThreshold));
+                        emotionClassifier.stressedThreshold));*/
+
+
     }
 
-    private void sendBroadcastMessage(String hearRate, String emotion, String certainty, String tresholds) {
+ /*   private void sendBroadcastMessage(String hearRate, String emotion, String certainty, String tresholds) {
         Intent intent = new Intent(BROADCAST_NAME);
         intent.putExtra(HEART_RATE, hearRate);
         intent.putExtra(EMOTION_NAME, emotion);
         intent.putExtra(EMOTION_CERTAINTY, certainty);
         intent.putExtra(EMOTION_THRESHOLDS, tresholds);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }*/
+
+    private void sendBroadcastMessage(String hearRate) {
+        Intent intent = new Intent(BROADCAST_NAME);
+        intent.putExtra(HEART_RATE, hearRate);
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
 }

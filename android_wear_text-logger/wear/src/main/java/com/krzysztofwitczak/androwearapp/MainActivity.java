@@ -32,6 +32,9 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -62,6 +65,9 @@ public class MainActivity extends WearableActivity implements
 
     EditText mEdit;
 
+     long startTimeFloat,endTimeFloat,  taskCompletionTime;
+    String startTimeHuman,endTimeHuman;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +84,12 @@ public class MainActivity extends WearableActivity implements
         clickButton = (Button) findViewById(R.id.submit);
         mEdit = (EditText) findViewById(R.id.editText);
 
+         startTimeFloat = System.currentTimeMillis();
+
+        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm:ss");
+         startTimeHuman = df.format(Calendar.getInstance().getTime());
+
+
         clickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +99,14 @@ public class MainActivity extends WearableActivity implements
                 mRateValue =   mEdit.getText().toString();
 
                 updateDisplay();
-                lastRateValue = mRateValue;
+
+                long endTimeFloat = System.currentTimeMillis();
+
+                DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm:ss");
+                 endTimeHuman = df.format(Calendar.getInstance().getTime());
+                taskCompletionTime = endTimeFloat-startTimeFloat;
+
+                lastRateValue = String.valueOf(startTimeFloat)+","+startTimeHuman+","+ String.valueOf(endTimeFloat)+","+endTimeHuman +","+String.valueOf(taskCompletionTime)+","+ mRateValue;
 
 
             }
