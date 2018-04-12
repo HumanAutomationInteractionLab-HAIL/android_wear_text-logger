@@ -1,8 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'smartwatch text log file'
+            keyPassword 'hejibo12'
+            storePassword 'hejibo12'
+            storeFile file('/Users/hejibo/OneDrive/Research/Wear typing/keypath')
+        }
+    }
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.krzysztofwitczak.androwearapp"
         minSdkVersion 21
@@ -19,7 +27,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.google.android.support:wearable:2.0.3'
     compile 'com.google.android.gms:play-services-wearable:11.0.0'
     provided 'com.google.android.wearable:wearable:2.0.3'

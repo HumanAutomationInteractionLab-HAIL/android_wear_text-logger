@@ -178,7 +178,7 @@ public class MainActivity extends WearableActivity implements
     @Override
     public void onSensorChanged(SensorEvent event) {
         mRateValue = Integer.toString(Math.round(event.values[0]));
-        mRateValue ="999";
+        //mRateValue ="999";
         updateDisplay();
 
         //when we disable this, the sensor value change will not be sent to the pad/phone

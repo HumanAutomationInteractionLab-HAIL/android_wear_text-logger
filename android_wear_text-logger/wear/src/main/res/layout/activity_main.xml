@@ -31,7 +31,7 @@
         android:textAlignment="center"
         android:textColor="#D76A85"
         android:textSize="20sp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_box="all" />
 
     <Button
@@ -51,7 +51,7 @@
         android:ems="10"
         android:inputType="textMultiLine"
         android:singleLine="false"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
 
 </android.support.wearable.view.BoxInsetLayout>
