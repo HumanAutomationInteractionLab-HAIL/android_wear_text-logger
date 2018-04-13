@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
                                         intent.getStringExtra(
                                                 WearListCallListenerService.HEART_RATE)));
 
+                        //Write the data as soon as the data is updated
+                        writeFileInternal("WearLogFile.txt",getBaseContext());
+
                         //disable emotion calculation.
 
     /*                    String emotionText;

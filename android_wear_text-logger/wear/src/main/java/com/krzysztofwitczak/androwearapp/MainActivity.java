@@ -55,24 +55,40 @@ public class MainActivity extends WearableActivity implements
     private Timer mTimer;
 
     // Sensor variables
-    private SensorManager mSensorManager;
+    //private SensorManager mSensorManager;
     private Sensor mHearRateSensor;
     private String mRateValue = "Rate unknown";
     private String lastRateValue;
     private boolean isConnected = false;
 
+    //Sensor mHeartRateSensor;
+    Sensor accelerometer;
+    Sensor mGyroscopeSensor;
+    SensorManager sm;
+    SensorManager mSensorManager;
+    TextView acceleration;
+    TextView heart;
+    private static final int SENSOR_TYPE_HEART_RATE = 65562;
+
     Button clickButton ;
 
     EditText mEdit;
 
-     long startTimeFloat,endTimeFloat,  taskCompletionTime;
-    String startTimeHuman,endTimeHuman;
+     long startTimeFloat,endTimeFloat,  taskCompletionTime,currentTimeFloat;
+    String startTimeHuman,endTimeHuman,currentTimeHuman;
+    DateFormat df;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setAmbientEnabled();
+
+        df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm:ss");
+
+
 
         ImageView imageView = (ImageView) findViewById(R.id.heart);
         Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
@@ -86,7 +102,7 @@ public class MainActivity extends WearableActivity implements
 
          startTimeFloat = System.currentTimeMillis();
 
-        DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm:ss");
+        final DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm:ss");
          startTimeHuman = df.format(Calendar.getInstance().getTime());
 
 
@@ -100,14 +116,11 @@ public class MainActivity extends WearableActivity implements
 
                 updateDisplay();
 
-                long endTimeFloat = System.currentTimeMillis();
+                currentTimeFloat = System.currentTimeMillis();
 
-                DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm:ss");
-                 endTimeHuman = df.format(Calendar.getInstance().getTime());
-                taskCompletionTime = endTimeFloat-startTimeFloat;
+                currentTimeHuman = df.format(Calendar.getInstance().getTime());
 
-                lastRateValue = String.valueOf(startTimeFloat)+","+startTimeHuman+","+ String.valueOf(endTimeFloat)+","+endTimeHuman +","+String.valueOf(taskCompletionTime)+","+ mRateValue;
-
+                lastRateValue = String.valueOf(currentTimeFloat)+","+currentTimeHuman+","+ ","+ mRateValue;
 
             }
         });
@@ -160,6 +173,17 @@ public class MainActivity extends WearableActivity implements
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mHearRateSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
         mSensorManager.registerListener(this, mHearRateSensor, SensorManager.SENSOR_DELAY_FASTEST);
+
+        //mSensorManager = ((SensorManager) getSystemService(SENSOR_SERVICE));
+        //mHeartRateSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
+        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        //mSensorManager.registerListener(this, mHeartRateSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        mGyroscopeSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mSensorManager.registerListener(this, mGyroscopeSensor, 40000);
+
+
     }
 
     protected void onPause() {
@@ -177,14 +201,72 @@ public class MainActivity extends WearableActivity implements
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        mRateValue = Integer.toString(Math.round(event.values[0]));
+
+
+        // TODO Auto-generate method stub
+
+        if (event.sensor.getType() == Sensor.TYPE_HEART_RATE)
+        {
+            String msg = "" + (int) event.values[0];
+            System.out.println("heart"+event.values[0]);
+            //heart.setText(msg);
+
+            mRateValue = "Heart rate:"+Integer.toString(Math.round(event.values[0]));
+
+            // Log.d(TAG, msg);
+
+
+        }
+
+          if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+
+        {
+           // acceleration.setText("X: " + event.values[0] +
+             //       "\nY: " + event.values[1] +
+               //     "\nZ: " + event.values[2]);
+            System.out.println("X: " + event.values[0] +
+                    "\nY: " + event.values[1] +
+                    "\nZ: " + event.values[2]);
+
+            //mRateValue = Integer.toString(Math.round(event.values[0]));
+           // mRateValue ="TYPE_ACCELEROMETER";
+
+            mRateValue = "Accelerometer: X:"+String.valueOf(event.values[0])+"\n"+"Y:"+String.valueOf(event.values[1])+"\n"+"Z:"+String.valueOf(event.values[2]);
+            //, event.values[1], event.values[2]);
+
+//            Log.d(TAG, msg);
+        }
+
+        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+            Log.d("gyro", event.timestamp + "\t" + event.values[0] + "\t" + event.values[1] + "\t" + event.values[2]);
+            mRateValue = "Gyroscope: X:"+String.valueOf(event.values[0])+"\n"+"Y:"+String.valueOf(event.values[1])+"\n"+"Z:"+String.valueOf(event.values[2]);
+
+        }
+
+        //mRateValue = Integer.toString(Math.round(event.values[0]));
         //mRateValue ="999";
+
         updateDisplay();
 
         //when we disable this, the sensor value change will not be sent to the pad/phone
         //lastRateValue = mRateValue;
 
        // lastRateValue = "99999";
+
+         currentTimeFloat = System.currentTimeMillis();
+
+         //df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm:ss");
+        currentTimeHuman = df.format(Calendar.getInstance().getTime());
+
+        lastRateValue = String.valueOf(currentTimeFloat)+","+currentTimeHuman+","+ ","+ mRateValue;
+
+/*
+        mGoogleApiClient = new GoogleApiClient.Builder(MainActivity.this)
+        .addApi(Wearable.API)
+        .addConnectionCallbacks(this)
+        .addOnConnectionFailedListener(this)
+        .build();
+        mTimer = new Timer();*/
 
     }
 
@@ -227,13 +309,21 @@ public class MainActivity extends WearableActivity implements
         }
 
         public void run() {
-            MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(
-                    mGoogleApiClient, mNode.getId(), path, message.getBytes()).await();
 
-            if (result.getStatus().isSuccess()) {
-                Log.v(LOG_KEY, "Message: {" + message + "} sent to: " + mNode.getDisplayName());
-            } else {
-                Log.v(LOG_KEY, "ERROR: failed to send Message");
+            try {
+                MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(
+                        mGoogleApiClient, mNode.getId(), path, message.getBytes()).await();
+
+                if (result.getStatus().isSuccess()) {
+                    Log.v(LOG_KEY, "Message: {" + message + "} sent to: " + mNode.getDisplayName());
+                } else {
+                    Log.v(LOG_KEY, "ERROR: failed to send Message");
+                }
+            }
+            finally {
+                Log.v(LOG_KEY, "failure to send message, but i want the app to live.");
+
+
             }
         }
 
@@ -266,6 +356,8 @@ public class MainActivity extends WearableActivity implements
             mContainerView.setBackground(null);
         }
 
-        mTextView.setText(String.format("%s bmp", mRateValue));
+//        mTextView.setText(String.format("%s bmp", mRateValue));
+        mTextView.setText(String.format("%s ", mRateValue));
+
     }
 }
